@@ -1,0 +1,36 @@
+{
+  "name": "grade-js",
+  "version": "1.0.10",
+  "description": "This JavaScript library produces complimentary gradients generated from the top 2 dominant colours in supplied images",
+  "main": "src/index.js",
+  "files": [
+    "src/index.js",
+    "docs/dist/grade.js"
+  ],
+  "scripts": {
+    "build": "browserify src/index.js -t babelify --standalone Grade > docs/dist/grade.js",
+    "dev": "watchify src/index.js -t babelify --standalone Grade -o docs/dist/grade.js",
+    "prepublish": "npm run build"
+  },
+  "keywords": [
+    "complimentary",
+    "gradients",
+    "image",
+    "color",
+    "complementary"
+  ],
+  "homepage": "http://benhowdle.im/grade",
+  "author": "Ben Howdle <hello@benhowdle.im> (http://benhowdle.im/)",
+  "license": "ISC",
+  "devDependencies": {
+    "babel-cli": "^6.11.4",
+    "babel-preset-es2015": "^6.13.2",
+    "babelify": "^7.3.0",
+    "browserify": "^13.1.0",
+    "watchify": "^3.7.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/benhowdle89/grade.git"
+  }
+}
