@@ -148,7 +148,7 @@ export const VideoPlayer = ({ movie, movieDetails, setMovieDetails, setMovie, vi
                     </TabPanel>
 
                     <TabPanel value={2}>
-                        <SimilarFilms movieDetails={movieDetails} setVideoLink={setVideoLink} setMovieDetails={setMovieDetails} />
+                        <SimilarFilms movieDetails={movieDetails} setVideoLink={setVideoLink} setMovieDetails={setMovieDetails} setUserMovieDetails={setUserMovieDetails} />
                     </TabPanel>
                 </Tabs>
 

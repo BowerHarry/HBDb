@@ -65,7 +65,23 @@
 
 .watchlist-container {
   width: 80%;
-  padding-top: 10vh;
+  height: 90vh;
+  padding-top: 5vh;
+  /* padding-bottom: 30vh; */
+  margin: auto;
+  /* position: relative;  */
+  display: flex;
+  /* flex-direction: column; */
+  /* align-items: center; */
+  min-width: 200px;
+  overflow: hidden;
+
+}
+
+.history-container {
+  width: 80%;
+  height: 90vh;
+  padding-top: 5vh;
   /* padding-bottom: 30vh; */
   margin: auto;
   /* position: relative;  */
