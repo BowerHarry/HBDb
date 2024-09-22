@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import "./MovieWatchlist.css";
+import "./History.css";
 import Sheet from '@mui/joy/Sheet';
 import Stack from '@mui/joy/Stack';
 import Box from '@mui/joy/Box';
@@ -11,6 +11,10 @@ import CardOverflow from '@mui/joy/CardOverflow';
 import Divider from '@mui/joy/Divider';
 import Typography from '@mui/joy/Typography';
 import { DragDropContext } from 'react-beautiful-dnd';
+import Rating from '@mui/material/Rating';
+import Link from '@mui/joy/Link';
+
+
 
 const Item = styled(Sheet)(({ theme }) => ({
     ...theme.typography['body-sm'],
@@ -23,7 +27,7 @@ const Item = styled(Sheet)(({ theme }) => ({
     borderRadius: theme.radius.md,
   }));
 
-export const MovieWatchlist = () => {
+export const History = ( {setTabValue} ) => {
     const [films, setFilms] = useState("")
     const [loading, setLoading] = useState(true)
     const [config, setConfig] = useState("")
@@ -39,6 +43,10 @@ export const MovieWatchlist = () => {
         handleLoad();
     },[]);
 
+    function selectMovie(movieid) {
+        setTabValue("search")
+    }
+
     const getListElements = films => {
         let content = [];
         films.forEach (function(value, key) {
@@ -51,7 +59,7 @@ export const MovieWatchlist = () => {
         const link = `${config.images.base_url}/w154/${movie.poster_path}.jpg`
         return (
             <Item>
-                <Card orientation="horizontal" variant="outlined" sx={{}}>
+                <Card orientation="horizontal" variant="outlined" >
                 <CardOverflow>
                     <AspectRatio ratio="2/3" sx={{ width: 120 }}>
                     <img
@@ -59,6 +67,7 @@ export const MovieWatchlist = () => {
                         srcSet={link}
                         loading="lazy"
                         alt=""
+                        sx={{ height: '100%', backgroundSize: 'cover' }}
                     />
                     </AspectRatio>
                 </CardOverflow>
@@ -67,7 +76,26 @@ export const MovieWatchlist = () => {
                     {movie.title}
                     </Typography>
                     <Typography display="inline" paddingRight={"0.5em"} level="body-xs">{new Date(movie.release_date).getFullYear()} · {toHoursAndMinutes(movie.vote_count).hours}hr {toHoursAndMinutes(movie.vote_count).minutes}mins</Typography>
+                    <Rating
+                        size="small"
+                        display="inline"
+                        name="simple-controlled"
+                        readOnly
+                        defaultValue={movie.vote_average ? (movie.vote_average/2) : 0}
+                        precision={0.5}
+                    />
                     <Typography level="body-sm">{movie.overview}</Typography>
+                    <Link
+                        overlay
+                        underline="none"
+                        // href="#interactive-card"
+                        sx={{ color: 'text.tertiary' }}
+                        component="button"
+                        onClick={() => {
+                            selectMovie(movie.id)
+                        }}
+                    >
+                    </Link>
                 </CardContent>
                 <CardOverflow
                     variant="soft"
@@ -81,6 +109,7 @@ export const MovieWatchlist = () => {
                     letterSpacing: '1px',
                     textTransform: 'uppercase',
                     borderLeft: '1px solid',
+            
                     //   borderColor: 'divider',
                     }}
                 >
@@ -117,6 +146,20 @@ export const MovieWatchlist = () => {
         const movie = await fetch(`https://api.themoviedb.org/3/movie/${movieid}?language=en-US`, opt)
         const decodedMovieJson = await movie.json()
         return decodedMovieJson.runtime
+    }
+
+    async function fetchUserRating(movieid) {
+        const options = {
+            method: 'GET',
+            headers: {
+              accept: 'application/json',
+              Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI0NjcwZDJlYWU4NGQyMWNhYjRhZWUzZjc5MjJjNDI5NiIsIm5iZiI6MTcyNTc4OTAzMi41NjE4MDQsInN1YiI6IjY2ZDc2OWYyZjU5ZjE2Y2JkODE4MDBmOCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.wyFvZFxkezyWw_t1uKrX5LXirF8V4sROEdk4MMfTaCM'
+            }
+          };
+          
+        const movie = await fetch(`https://api.themoviedb.org/3/movie/${movieid}/account_states`, options)
+        const decodedMovieJson = await movie.json()
+        return decodedMovieJson.rated.value
 
     }
 
@@ -129,12 +172,15 @@ export const MovieWatchlist = () => {
             }
           };
     
-          const response = await fetch('https://api.themoviedb.org/3/account/21498597/watchlist/movies?language=en-US&page=1&sort_by=created_at.asc', options)
+          const response = await fetch('https://api.themoviedb.org/3/account/21498597/rated/movies?language=en-US&page=1&sort_by=created_at.asc', options)
           const decodedResponse = await response.json()
           const list = new Map(Object.entries(decodedResponse.results))
           var i = 0
           list.forEach(async function(value, key) {
             const runtime = await fetchRuntime(list.get(key).id)
+            const userRating = await fetchUserRating(list.get(key).id)
+            console.log(userRating)
+            list.get(key).vote_average = userRating
             list.get(key).vote_count = runtime
             i++
             if (list.size == i) {

@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import './App.css'
 import { SearchBar } from './components/search/SearchBar';
+import { History } from './components/history/History';
 import { SearchResultsList } from './components/search/SearchResultsList';
 import { VideoPlayer } from './components/search/VideoPlayer';
 import { NavigationBar } from './components/NavigationBar';
@@ -42,8 +43,8 @@ function App() {
         
       }
       { tabValue == "history" &&
-        <div>
-          History
+        <div className='history-container'>
+          <History setTabValue={setTabValue} />
         </div>
       }
       { tabValue == "tv" &&

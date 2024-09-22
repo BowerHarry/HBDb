@@ -18,7 +18,7 @@ import { Icon } from "@mui/material";
 // import Typography from '@mui/joy/Typography';
 // import LocationOnRoundedIcon from '@mui/icons-material/LocationOnRounded';
 
-export const SimilarFilms = ({ movieDetails, setVidsrcLink, setMovieDetails }) => {
+export const SimilarFilms = ({ movieDetails, setVidsrcLink, setMovieDetails, setUserMovieDetails }) => {
     const [films, setFilms] = useState("")
     const [loading, setLoading] = useState(true)
     const [config, setConfig] = useState("")
@@ -87,7 +87,6 @@ export const SimilarFilms = ({ movieDetails, setVidsrcLink, setMovieDetails }) =
 
     function handleClick(e, id) {
       e.preventDefault();
-      console.log("hey")
       setFlip(flip > 0 ? 0 : id)
     }
 
@@ -201,6 +200,7 @@ export const SimilarFilms = ({ movieDetails, setVidsrcLink, setMovieDetails }) =
     }
 
     const selectMovie = movieID => {
+
         const options = {
             method: 'GET',
             headers: {
@@ -212,9 +212,7 @@ export const SimilarFilms = ({ movieDetails, setVidsrcLink, setMovieDetails }) =
           fetch(`https://api.themoviedb.org/3/movie/${movieID}?language=en-US`, options)
             .then(response => response.json())
             .then((json) => {
-                console.log(json)
                 setMovieDetails(json);
-                // setVidsrcLink()
                 setVidsrcLink(`https://vidsrc.xyz/embed/movie?imdb=${json.imdb_id}`)
             })
     }
