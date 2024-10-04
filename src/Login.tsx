@@ -29,13 +29,9 @@ import { signInAnonymously, getAuth } from 'firebase/auth';
 import { CiTurnR1 } from 'react-icons/ci';
 import { useTransition, animated, config } from '@react-spring/web'
 // import { useTransition, animated, config } from 'react-spring'
-
-
 // const [moviePosters, setMoviePosters] = useState<ILoggedIn>({loggedIn: false});
-
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
-
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
@@ -47,9 +43,6 @@ const firebaseConfig = {
   appId: "1:321974365769:web:b8b7dfe1fb9d4d3fd81998",
   measurementId: "G-PE0LBV70GJ"
 };
-
-
-
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
@@ -69,12 +62,10 @@ const firebaseUser = auth.currentUser;
   //   });
   // }
   
-
 // const querySnapshot = await getDocs(collection(db, "users"));
 // querySnapshot.forEach((doc) => {
 //   console.log(`${doc.id} => ${doc.data()}`);
 // });
-
 var APIUSERToken = ""
 const hashedPassword = await(sha256('apiuser'))
 const usersRef = collection(db, 'users');
@@ -84,10 +75,8 @@ querySnapshot.forEach((doc) => {
   APIUSERToken = doc.data().tmdbAPIKey;
 });
 console.log(APIUSERToken)
-
 // const configKeyTyped = "images" as keyof typeof Object;
 // const configKeyURLTyped = "base_url" as keyof typeof Object;
-
 const opt = {
   method: 'GET',
   headers: {
@@ -95,13 +84,10 @@ const opt = {
     Authorization: `Bearer ${APIUSERToken}`
   }
 };
-
 var base_url: string
-
 fetch('https://api.themoviedb.org/3/configuration', opt)
 .then(response => response.json())
 .then(response => (base_url = response.images.base_url))
-
 const options = {
   method: 'GET',
   headers: {
@@ -127,11 +113,9 @@ fetch('https://api.themoviedb.org/3/movie/popular?language=en-US&page=1', option
     console.log(posterArray)
               // setLoading(false)
   })
-
 interface ILoggedIn {
   loggedIn: boolean;
 }
-
 interface FormElements extends HTMLFormControlsCollection {
   username: HTMLInputElement;
   password: HTMLInputElement;
@@ -140,29 +124,22 @@ interface FormElements extends HTMLFormControlsCollection {
 interface SignInFormElement extends HTMLFormElement {
   readonly elements: FormElements;
 }
-
 async function sha256(message: string) {
   // encode as UTF-8
   const msgBuffer = new TextEncoder().encode(message);                    
-
   // hash the message
   const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
-
   // convert ArrayBuffer to Array
   const hashArray = Array.from(new Uint8Array(hashBuffer));
-
   // convert bytes to hex string                  
   const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
   return hashHex;
 }
-
 function ColorSchemeToggle(props: IconButtonProps) {
   const { onClick, ...other } = props;
   const { mode, setMode } = useColorScheme();
   const [mounted, setMounted] = React.useState(false);
-
   React.useEffect(() => setMounted(true), []);
-
   return (
     <IconButton
       aria-label="toggle light/dark mode"
@@ -179,34 +156,23 @@ function ColorSchemeToggle(props: IconButtonProps) {
     </IconButton>
   );
 }
-
-
-
 // const customTheme = extendTheme({ defaultColorScheme: 'dark' });
-
 export default function Login() {
-
   const [loggedIn, setLoggedIn] = useState<ILoggedIn>({loggedIn: false});
   const [currentPosterIndex, setCurrentPosterIndex] = useState({currentPosterIndex : 0});
   const [, forceUpdate] = useReducer(x => x + 1, 0);
-
   function updatePoster() {
     setCurrentPosterIndex({currentPosterIndex : ((currentPosterIndex.currentPosterIndex + 1) % posterArray.length )});
   }
-
   // React.useEffect(() => forceUpdate, [currentPosterIndex]);
-
   let id = setInterval(updatePoster, 10000)
   // clearInterval(id); // top stop the repetition
-
   
-
   class loginObject {
     username: string
     password: string
     persistant: Boolean
   }
-
   async function validateLoginDetails(username: string, password: string){
     var tmdbAPIKey = ""
     const hashedPassword = await(sha256(password))
@@ -244,7 +210,6 @@ export default function Login() {
       .catch(err => console.error(err));
   }
   // const [loggedIn, setLoggedIn] = useState<ILoggedIn>({loggedIn: false});
-
   return (
       (!loggedIn.loggedIn) ?
       <div>
@@ -323,7 +288,6 @@ export default function Login() {
                   Sign in
                 </Typography>
               </Stack>
-
             <Divider
               sx={(theme) => ({
                 [theme.getColorSchemeSelector('light')]: {
@@ -341,7 +305,6 @@ export default function Login() {
                   data.username = formElements.username.value;
                   data.password = formElements.password.value;
                   // data.persistant = formElements.persistent.checked;
-
                   loginSubmit(data)
                   // alert(JSON.stringify(data, null, 2));
                 }}

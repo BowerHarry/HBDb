@@ -1,42 +1,19 @@
-
 <!doctype html>
+
 <html lang="en">
+
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>HBDb</title>
   </head>
   <body>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <!-- <script src="bundle.js"></script> -->
+    <!-- <script src="/helper-functions.js" type="text/javascript"></script>
+    <script src="/config.js" type="text/javascript"></script> -->
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>
-<link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-<script src="bundle.js"></script>
 
-<script type="text/javascript">
-
-  function setNativeValue(element, value) {
-      let lastValue = element.value;
-      element.value = value;
-      let event = new Event("input", { target: element, bubbles: true });
-      // React 16
-      let tracker = element._valueTracker;
-      if (tracker) {
-          tracker.setValue(lastValue);
-      }
-      element.dispatchEvent(event);
-  }
- 
-
-
-  function clearSearchBar() {
-    var input = document.getElementById("search-bar");
-    setNativeValue(input, "");
-  }
-
-  function stopVideoLoad() {
-    document.getElementsByTagName('iframe')[0].src = "about:blank";
-  }
-  
-</script>
