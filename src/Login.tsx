@@ -256,7 +256,7 @@ export default function Login() {
               {/* <IconButton variant="soft" color="primary" size="sm"> */}
                 {/* <BadgeRoundedIcon /> */}
               {/* </IconButton> */}
-              <Typography level="title-lg">HBDb</Typography>
+              <Typography level="title-lg">HBDb Deploy Test</Typography>
             </Box>
             <ColorSchemeToggle />
           </Box>
