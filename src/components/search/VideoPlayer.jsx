@@ -65,7 +65,7 @@ export const VideoPlayer = ({ movie, movieDetails, setMovieDetails, setMovie, vi
         setMovieLinkExists(false)
         if (movie) {
             setLoading(true)
-            const response = await fetch(`https://example.com/api/v1/?api_key=REMOVED_API_KEY&url=https://example.com/embed/movie?imdb=${movieDetails.imdb_id}`)
+            const response = await fetch(`https://example.com/api?api_key=REMOVED_API_KEY&request_url=https://example.com/embed/movie/${movieDetails.imdb_id}&js_render=false`)
             const decodedJson = await response.text();
             if (decodedJson.includes("<title>404 Not Found</title>")) {
                 localStorage.setItem(movie.id, movie.title)
@@ -75,8 +75,6 @@ export const VideoPlayer = ({ movie, movieDetails, setMovieDetails, setMovie, vi
                 setMovie()
                 setMovieLinkExists(false)
                 setLoading(false)
-                
-
             }
             else {
                 console.log(userMovieDetails.rated)
@@ -86,8 +84,6 @@ export const VideoPlayer = ({ movie, movieDetails, setMovieDetails, setMovie, vi
                 setLoading(false)
             }
         }
-        
-        
     }
 
     return (
