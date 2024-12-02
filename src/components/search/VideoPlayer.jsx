@@ -65,7 +65,7 @@ export const VideoPlayer = ({ movie, movieDetails, setMovieDetails, setMovie, vi
         setMovieLinkExists(false)
         if (movie) {
             setLoading(true)
-            const response = await fetch(`https://scraping.narf.ai/api/v1/?api_key=3oOBaxU9pIJZTS2nRsST2sr091x7GoAPpKkkK8PyTJJjhbGu7v8abc9BOq2blsiqfgEpL6UDfmPimYBEQH&url=https://vidsrc.xyz/embed/movie?imdb=${movieDetails.imdb_id}`)
+            const response = await fetch(`https://app.scrapenetwork.com/api?api_key=2f27fdAxe57Qnx8b387beeDPSNQf*w&request_url=https://vidsrc.xyz/embed/movie/${movieDetails.imdb_id}&js_render=false`)
             const decodedJson = await response.text();
             if (decodedJson.includes("<title>404 Not Found</title>")) {
                 localStorage.setItem(movie.id, movie.title)
@@ -75,8 +75,6 @@ export const VideoPlayer = ({ movie, movieDetails, setMovieDetails, setMovie, vi
                 setMovie()
                 setMovieLinkExists(false)
                 setLoading(false)
-                
-
             }
             else {
                 console.log(userMovieDetails.rated)
@@ -86,8 +84,6 @@ export const VideoPlayer = ({ movie, movieDetails, setMovieDetails, setMovie, vi
                 setLoading(false)
             }
         }
-        
-        
     }
 
     return (
