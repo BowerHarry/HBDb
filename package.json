@@ -1,7 +1,7 @@
 {
   "name": "movie-website",
   "private": true,
-  "proxy": "https://localhost:5173", 
+  "proxy": "https://localhost:5173",
   "version": "0.0.0",
   "type": "module",
   "scripts": {
@@ -18,6 +18,7 @@
     "@mui/joy": "^5.0.0-beta.48",
     "@mui/material": "^6.0.1",
     "@react-spring/web": "^9.7.4",
+    "axios": "^1.7.9",
     "firebase": "^10.13.1",
     "grade-js": "^1.0.10",
     "react": "^18.3.1",
