@@ -182,6 +182,7 @@ export default function Login() {
     querySnapshot.forEach((doc) => {
       tmdbAPIKey = doc.data().tmdbAPIKey;
     });
+    console.log(tmdbAPIKey)
     return tmdbAPIKey
   }
   
@@ -190,7 +191,7 @@ export default function Login() {
     validateKey(tmdbAPIKey)
   }
   
-  function validateKey(password: String) {
+  async function validateKey(password: String) {
     const options = {
       method: 'GET',
       headers: {
@@ -199,15 +200,10 @@ export default function Login() {
       }
     };
     
-    fetch('https://api.themoviedb.org/3/authentication', options)
-      .then(response => response.json())
-      .then(response => {
-        console.log(response)
-        if (response.success){
-          setLoggedIn({loggedIn : true});
-        }
-      })
-      .catch(err => console.error(err));
+    const response = await fetch('https://api.themoviedb.org/3/authentication', options)
+    if (response.status == 200){
+      setLoggedIn({loggedIn : true});
+    }
   }
   // const [loggedIn, setLoggedIn] = useState<ILoggedIn>({loggedIn: false});
   return (
