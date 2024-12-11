@@ -4,7 +4,7 @@
 Dependencies:
 - npm
 - allow CORS browser plugin (until web service is developed)
-  - Tested with Firefox: https://addons.mozilla.org/en-GB/firefox/addon/access-control-allow-origin/
+  - Tested with Firefox: https://github.com/spenibus/cors-everywhere-firefox-addon
 
 Instructions:
 - Clone repo
