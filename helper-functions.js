@@ -1,4 +1,4 @@
-const liveService = false;
+const liveService = true;
 
 const wsURLRoot = liveService ? "https://hbdb-1459b.nw.r.appspot.com" : "http://localhost:8080";
 
