@@ -115,3 +115,4 @@ node_modules/.vite/deps/@mui_joy_ButtonGroup.js
 node_modules/.vite/deps/@mui_joy_Button.js
 node_modules/.vite/deps/@mui_joy_Box.js
 node_modules/.vite/deps/@mui_joy_AspectRatio.js
+.DS_Store
