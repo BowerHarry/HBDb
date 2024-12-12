@@ -1,17 +1,21 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { LoginForm } from './components/login/LoginForm';
+import { ResetPasswordForm } from './components/login/ResetPasswordForm';
+import { RequestAccessForm } from './components/login/RequestAccessForm';
 import axios from 'axios';
 import { CssVarsProvider, useColorScheme } from '@mui/joy/styles';
 import CssBaseline from '@mui/joy/CssBaseline';
 import Box from '@mui/joy/Box';
-import Button from '@mui/joy/Button';
-import FormControl from '@mui/joy/FormControl';
-import FormLabel from '@mui/joy/FormLabel';
-import Input from '@mui/joy/Input';
 import Typography from '@mui/joy/Typography';
 import Stack from '@mui/joy/Stack';
 import IconButton, { IconButtonProps } from '@mui/joy/IconButton';
 import App from './App';
 import { wsURL, user, sha256, params } from '../helper-functions';
+import { loginStyles } from './styles/login.styles';
+import { PosterDots } from './components/login/PosterDots';
+import DarkModeRoundedIcon from '@mui/icons-material/DarkModeRounded';
+import LightModeRoundedIcon from '@mui/icons-material/LightModeRounded';
+import { usePosterAnimation } from './hooks/usePosterAnimation';
 
 var response = await fetch(wsURL("/tmdb/movies/posters"), {method: 'POST'});
 var posterArray: string[] = await response.json();
@@ -27,6 +31,10 @@ interface FormElements extends HTMLFormControlsCollection {
 
 interface SignInFormElement extends HTMLFormElement {
   readonly elements: FormElements;
+}
+
+interface RequestFormElements extends HTMLFormControlsCollection {
+  email: HTMLInputElement;
 }
 
 function ColorSchemeToggle(props: IconButtonProps) {
@@ -46,16 +54,33 @@ function ColorSchemeToggle(props: IconButtonProps) {
         setMode(mode === 'light' ? 'dark' : 'light');
         onClick?.(event);
       }}
+      sx={{
+        position: 'fixed',
+        top: '1rem',
+        right: '1rem',
+        zIndex: 999,
+      }}
       {...other}
     >
-      {/* Icon logic can be added here if needed */}
+      {mode === 'light' ? <DarkModeRoundedIcon /> : <LightModeRoundedIcon />}
     </IconButton>
   );
 }
 
+
+
 export default function Login() {
   const [loggedIn, setLoggedIn] = useState<ILoggedIn>({ loggedIn: false });
-  const [currentPosterIndex, setCurrentPosterIndex] = useState({ currentPosterIndex: 0 });
+  const [showOptions, setShowOptions] = useState(false);
+  const [showRequestForm, setShowRequestForm] = useState(false);
+  const [showResetForm, setShowResetForm] = useState(false);
+
+  const { 
+    currentIndex, 
+    isAnimating, 
+    previousIndex, 
+    handleDotClick 
+  } = usePosterAnimation({ posterArray });
 
   async function validateLoginDetails(username: string, password: string) {
     const hashedPassword: string = await sha256(password);
@@ -66,7 +91,7 @@ export default function Login() {
 
   async function loginSubmit(loginData: { username: string; password: string }) {
     const user = await validateLoginDetails(loginData.username, loginData.password);
-    if (user) {
+    if (user && user.active) {
       validateKey(user.tmdbAPIKey);
     }
   }
@@ -78,94 +103,77 @@ export default function Login() {
     }
   }
 
+  const handleRequestSubmit = (event: React.FormEvent<RequestFormElements>) => {
+    event.preventDefault();
+    // Handle the request submission logic here
+    setShowRequestForm(false);
+    
+  };
+
+  const handleResetSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    // Handle the request submission logic here
+    setShowResetForm(false);
+    const formElement = event.currentTarget.email;
+    const response = await axios.post(wsURL("/reset"), params({ "email": formElement.value }));
+    console.log(response);
+  };
+
   return (
     !loggedIn.loggedIn ? (
       <div>
         <CssVarsProvider disableTransitionOnChange>
           <CssBaseline />
           <Box
-            sx={(theme) => ({
-              width: { xs: '100%', md: '50vw' },
-              transition: 'width var(--Transition-duration)',
-              transitionDelay: 'calc(var(--Transition-duration) + 0.1s)',
-              position: 'relative',
-              zIndex: 1,
-              display: 'flex',
-              justifyContent: 'flex-end',
-              backdropFilter: 'blur(12px)',
-              backgroundColor: 'rgba(255 255 255 / 0.2)',
-              [theme.getColorSchemeSelector('dark')]: {
-                backgroundColor: 'rgba(19 19 24 / 0.4)',
-              },
-            })}
+            component="header"
+            sx={{ 
+              position: 'fixed',
+              top: '1rem',
+              left: '1rem',
+              zIndex: 999,
+            }}
           >
-            <Box
-              sx={{
-                display: 'flex',
-                flexDirection: 'column',
-                minHeight: '100dvh',
-                width: '100%',
-                px: 2,
-              }}
-            >
-              <Box
-                component="header"
-                sx={{ py: 3, display: 'flex', justifyContent: 'space-between' }}
-              >
-                <Typography level="title-lg">HBDb Deploy Test</Typography>
-                <ColorSchemeToggle />
-              </Box>
-              <Box
-                component="main"
-                sx={{
-                  my: 'auto',
-                  py: 2,
-                  pb: 5,
-                  display: 'flex',
-                  flexDirection: 'column',
-                  gap: 2,
-                  width: 400,
-                  maxWidth: '100%',
-                  mx: 'auto',
-                  borderRadius: 'sm',
-                  '& form': {
-                    display: 'flex',
-                    flexDirection: 'column',
-                    gap: 2,
-                  },
-                }}
-              >
+            <Typography level="title-lg">HBDb</Typography>
+          </Box>
+          <ColorSchemeToggle />
+          <Box sx={loginStyles.mainBox}>
+            <Box sx={loginStyles.contentBox}>
+              <Box component="main" sx={loginStyles.formBox}>
                 <Stack sx={{ gap: 1 }}>
                   <Typography component="h1" level="h3">
-                    Sign in
+                    {!showRequestForm && !showResetForm ? 'Sign in' : ''}
+                    {showRequestForm ? 'Request Access' : ''}
+                    {showResetForm ? 'Reset Password' : ''}
                   </Typography>
                 </Stack>
                 <Stack sx={{ gap: 4, mt: 2 }}>
-                  <form
-                    onSubmit={(event: React.FormEvent<SignInFormElement>) => {
-                      event.preventDefault();
-                      const formElements = event.currentTarget.elements;
-                      const data = {
-                        username: formElements.username.value,
-                        password: formElements.password.value,
-                      };
-                      loginSubmit(data);
-                    }}
-                  >
-                    <FormControl required>
-                      <FormLabel>Username</FormLabel>
-                      <Input type="text" name="username" />
-                    </FormControl>
-                    <FormControl required>
-                      <FormLabel>Password</FormLabel>
-                      <Input type="password" name="password" />
-                    </FormControl>
-                    <Stack sx={{ gap: 4, mt: 2 }}>
-                      <Button type="submit" fullWidth>
-                        Sign in
-                      </Button>
-                    </Stack>
-                  </form>
+                  {!showRequestForm && !showResetForm ? (
+                    <LoginForm 
+                      onSubmit={(event: React.FormEvent<SignInFormElement>) => {
+                        event.preventDefault();
+                        const formElements = event.currentTarget.elements;
+                        const data = {
+                          username: formElements.username.value,
+                          password: formElements.password.value,
+                        };
+                        loginSubmit(data);
+                      }}
+                      onShowOptions={() => setShowOptions(!showOptions)}
+                      showOptions={showOptions}
+                      onResetPassword={() => setShowResetForm(true)}
+                      onRequestAccess={() => setShowRequestForm(true)}
+                    />
+                  ) : showRequestForm ? (
+                    <RequestAccessForm 
+                      onSubmit={handleRequestSubmit}
+                      onBack={() => setShowRequestForm(false)}
+                    />
+                  ) : (
+                    <ResetPasswordForm
+                      onSubmit={handleResetSubmit}
+                      onBack={() => setShowResetForm(false)}
+                    />
+                  )}
                 </Stack>
               </Box>
               <Box component="footer" sx={{ py: 3 }}>
@@ -175,26 +183,25 @@ export default function Login() {
               </Box>
             </Box>
           </Box>
-          <Box
-            sx={(theme) => ({
-              height: '70%',
-              position: 'fixed',
-              width: '27vw',
-              right: 0,
-              top: '15vh',
-              bottom: 0,
-              left: { xs: 0, md: '60vw' },
-              backgroundSize: 'contain',
-              backgroundPosition: 'right',
-              backgroundRepeat: 'no-repeat',
-              backgroundImage:
-                currentPosterIndex.currentPosterIndex
-                  ? `url(${posterArray[currentPosterIndex.currentPosterIndex]})`
-                  : 'url(http://image.tmdb.org/t/p/w780//8cdWjvZQUExUUTzyp4t6EDMubfO.jpg)',
-            })}
-          />
+          <Box sx={loginStyles.posterContainer}>
+            <Box 
+              sx={{
+                ...loginStyles.posterSlider,
+                transform: `translateX(-${currentIndex * (80 * 530/795)}vh)`,
+                transition: currentIndex === 0 && previousIndex === posterArray.length 
+                  ? 'none' 
+                  : 'transform 0.5s ease-in-out'
+              }}
+            >
+              {posterArray.map((url, index) => (
+                <Box key={index} sx={{...loginStyles.posterImage, backgroundImage: `url(${url})`}} />
+              ))}
+              <Box key="loop" sx={{...loginStyles.posterImage, backgroundImage: `url(${posterArray[0]})`}} />
+            </Box>
+          </Box>
+          <PosterDots onDotClick={handleDotClick} disabled={isAnimating} />
         </CssVarsProvider>
-      </div>
+      </div> 
     ) : (
       <App />
     )
