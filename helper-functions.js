@@ -52,6 +52,7 @@ export class user {
   googleAPIKey;
   mdblistAPIKey;
   scrapenetworkAPIKey;
+  active;
 
   constructor(json) {
       this.username = json.username;
@@ -59,5 +60,6 @@ export class user {
       this.googleAPIKey = json.googleAPIKey;
       this.mdblistAPIKey = json.mdblistAPIKey;
       this.scrapenetworkAPIKey = json.scrapenetworkAPIKey;
+      this.active = json.active;
   }
 }
