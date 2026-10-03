@@ -1,50 +1,41 @@
-import React, {useState} from "react";
+import {useEffect} from "react";
 import {FaSearch} from "react-icons/fa"
 import "./SearchBar.css"
+import { searchFilms } from "../../api";
 
-export const SearchBar = ({ setResults }) => {
-    const [input, setInput] = useState("")
+export const SearchBar = ({ query, setQuery, setResults }) => {
 
-    const fetchData = (value) => {
-        const options = {
-            method: 'GET',
-            headers: {
-              accept: 'application/json',
-              Authorization: 'Bearer REMOVED_TMDB_TOKEN'
-            }
-          };
-          
-          fetch(`https://api.themoviedb.org/3/search/movie?query=${value}&include_adult=false&language=en-US&page=1`, options)
-            .then(response => response.json())
-            .then((json) => {
-                const results = json.results.filter((film) => {
+    useEffect(() => {
+        const term = query.trim().toLowerCase();
+        if (!term) {
+            setResults([]);
+            return;
+        }
+
+        // Ignore the response if the query has changed by the time it arrives.
+        let cancelled = false;
+        searchFilms(term)
+            .then(({ results }) => {
+                if (cancelled) return;
+                const matches = results.filter((film) => {
                     return (
-                    value && 
-                    film && 
-                    film.title && 
+                    film.title &&
                     film.original_language == "en" &&
-                    film.id &&
-                    !localStorage.getItem(film.id) &&
-                    film.title.toLowerCase().includes(value)
+                    film.title.toLowerCase().includes(term)
                     )
                 });
-                const sortedResults = (results.sort(function (a, b) {
-                    return b.popularity - a.popularity;
-             }))
-                setResults(sortedResults);
+                setResults(matches.sort((a, b) => b.popularity - a.popularity));
             })
-
-    }
-
-    const handleChange = (value) => {
-        setInput(value)
-        fetchData(value)
-    }
+            .catch(() => {
+                if (!cancelled) setResults([]);
+            });
+        return () => { cancelled = true; };
+    }, [query, setResults]);
 
     return (
     <div className="input-wrapper">
         <FaSearch id="search-icon" />
-        <input id="search-bar" placeholder="Type to search..." value={input} onChange={(e) => handleChange(e.target.value)}/>
+        <input id="search-bar" aria-label="Search films" placeholder="Type to search..." value={query} onChange={(e) => setQuery(e.target.value)}/>
     </div>
     )
 }

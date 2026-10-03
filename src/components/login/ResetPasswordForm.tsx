@@ -7,14 +7,18 @@ import Stack from '@mui/joy/Stack';
 import { InfoOutlined } from '@mui/icons-material';
 import Tooltip from '@mui/joy/Tooltip';
 
+interface ResetPasswordFormProps {
+  onSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
+  onBack: () => void;
+}
 
-export const ResetPasswordForm = ({ onSubmit, onBack }) => (
+export const ResetPasswordForm: React.FC<ResetPasswordFormProps> = ({ onSubmit, onBack }) => (
     <form onSubmit={onSubmit}>
       <Stack spacing={2}>
         <FormControl required>
           <FormLabel sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
             Email Address
-            <Tooltip title="Enter the email address associated with your account. You will receive a temporary password by email." placement="right">
+            <Tooltip title="Enter the email address associated with your account. You will receive a link to choose a new password." placement="right">
               <InfoOutlined sx={{ fontSize: '1rem' }} />
             </Tooltip>
           </FormLabel>

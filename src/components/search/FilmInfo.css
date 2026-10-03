@@ -1,28 +1,11 @@
 .info {
     padding-top: 1vh;
     overflow:scroll;
-    
-}
-.rating-icon {
-    font-size: 1.5em;
-  }
-
-.imdb {
-    color: #edc747
-}
-
-.letterboxd {
-    color: #475463
-}
-
-.imdbid {
-    padding-top: 1em;
 }
 
 .rating {
     display: inline-flex;
     padding-right: 0.8em;
-    /* vertical-align: middle; */
     padding-top: 0.5em;
 }
 
@@ -32,7 +15,6 @@
   }
 
 .rating-text {
-    /* padding-top: 4px; */
     padding-left: 5px;
 }
 

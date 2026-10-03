@@ -1,7 +1,5 @@
-import React from 'react';
 import "./NavigationBar.css";
 import {FaList, FaSearch, FaFilm, FaTv, FaStarHalfAlt} from "react-icons/fa"
-import { FaClockRotateLeft } from 'react-icons/fa6';
 import BottomNavigation from '@mui/material/BottomNavigation';
 import BottomNavigationAction from '@mui/material/BottomNavigationAction';
 

@@ -1,13 +1,12 @@
-import React from "react";
 import "./SearchResultsList.css";
 import { SearchResult } from "./SearchResult";
 
-export const SearchResultsList = ({ results, movieDetails, setMovieDetails, setResults, setMovie, setVideoLink, setUserMovieDetails }) => {
+export const SearchResultsList = ({ results, onSelect }) => {
     return (
         <div className="results-list">
             {
-                results.map((result, id) => {
-                    return <SearchResult result={result} key={id} movieDetails={movieDetails} setMovieDetails={setMovieDetails} setResults={setResults} setMovie={setMovie} setVideoLink={setVideoLink} setUserMovieDetails={setUserMovieDetails} />;
+                results.map((result) => {
+                    return <SearchResult result={result} key={result.id} onSelect={onSelect} />;
                 })
             }
         </div>

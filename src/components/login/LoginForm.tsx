@@ -1,11 +1,19 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import Button from '@mui/joy/Button';
 import FormControl from '@mui/joy/FormControl';
 import FormLabel from '@mui/joy/FormLabel';
 import Input from '@mui/joy/Input';
 import Stack from '@mui/joy/Stack';
 
-export const LoginForm = ({ onSubmit, onShowOptions, showOptions, onResetPassword, onRequestAccess }) => (
+interface LoginFormProps {
+  onSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
+  onShowOptions: () => void;
+  showOptions: boolean;
+  onResetPassword: () => void;
+  onRequestAccess: () => void;
+}
+
+export const LoginForm: React.FC<LoginFormProps> = ({ onSubmit, onShowOptions, showOptions, onResetPassword, onRequestAccess }) => (
     <form onSubmit={onSubmit}>
       <FormControl required>
         <FormLabel>Username</FormLabel>

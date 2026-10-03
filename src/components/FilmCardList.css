@@ -1,0 +1,11 @@
+.film-card-list {
+    width: 100%;
+    height: 100%;
+    overflow: scroll;
+}
+
+.film-card-list-message {
+    display: flex;
+    justify-content: center;
+    padding-top: 30vh;
+}

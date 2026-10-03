@@ -1,7 +1,6 @@
 {
-  "name": "movie-website",
+  "name": "hbdb",
   "private": true,
-  "proxy": "https://localhost:5173",
   "version": "0.0.0",
   "type": "module",
   "scripts": {
@@ -11,24 +10,17 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@emotion/react": "^11.13.3",
-    "@emotion/styled": "^11.13.0",
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.0",
     "@fontsource/inter": "^5.0.20",
     "@fontsource/roboto": "^5.0.14",
     "@mui/icons-material": "^6.2.0",
-    "@mui/joy": "^5.0.0-beta.48",
-    "@mui/material": "^6.0.1",
-    "@react-spring/web": "^9.7.4",
-    "axios": "^1.7.9",
-    "firebase": "^10.13.1",
-    "grade-js": "^1.0.10",
+    "@mui/joy": "^5.0.0-beta.50",
+    "@mui/material": "^6.2.0",
     "react": "^18.3.1",
-    "react-beautiful-dnd": "^13.1.1",
     "react-card-flip": "^1.2.3",
     "react-dom": "^18.3.1",
-    "react-icons": "^5.3.0",
-    "react-loader-spinner": "^6.1.6",
-    "use-double-click": "^1.0.5"
+    "react-icons": "^5.3.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.9.0",
