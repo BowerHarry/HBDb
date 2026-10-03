@@ -4,9 +4,9 @@ A personal film site for searching films, comparing their ratings, rating them y
 
 **Status:** abandoned. Last worked on in December 2024, not deployed anywhere, kept for reference.
 
-![HBDb sign-in screen with the poster carousel](docs/images/login.png)
+![HBDb sign-in screen with the poster carousel](docs/images/login.jpg)
 
-<sub>Screenshots use the built-in demo mode: the films and poster art are made up.</sub>
+<sub>Screenshots are from the built-in demo mode. The films, posters, trailers and site ratings are real, saved from TMDB, MDBList and YouTube in October 2026; the watchlist and star ratings are sample data.</sub>
 
 ## Why it exists
 
@@ -22,9 +22,19 @@ Looking up a film usually means checking several sites: one for the details, oth
 
 The "Films" and "TV" tabs are placeholders; TV shows were planned but never built.
 
-| Watch list | History |
+**The film page**: trailer, your own rating and watchlist button, and ratings from IMDb, Letterboxd and Rotten Tomatoes.
+
+![Film page for Blade Runner 2049 with trailer and ratings](docs/images/film.jpg)
+
+| Search as you type | Similar films, with one card flipped to its overview |
 | --- | --- |
-| ![Watch list](docs/images/watchlist.png) | ![History of rated films](docs/images/history.png) |
+| ![Search results dropdown](docs/images/search.png) | ![Similar films as poster cards](docs/images/similar.jpg) |
+| **Watch list** | **History of rated films** |
+| ![Watch list](docs/images/watchlist.jpg) | ![History of rated films](docs/images/history.jpg) |
+
+| Dark mode, with more sign-in options | Request access | Reset password |
+| --- | --- | --- |
+| ![Sign-in screen in dark mode](docs/images/login-dark.jpg) | ![Request access form](docs/images/request-access.jpg) | ![Reset password form](docs/images/reset-password.jpg) |
 
 ## Technical highlights
 
@@ -32,7 +42,7 @@ The "Films" and "TV" tabs are placeholders; TV shows were planned but never buil
 - **The browser holds no API keys.** A small Express service ([HBDb-WS](https://github.com/BowerHarry/HBDb-WS)) signs users in against Firestore, issues session tokens, and makes every TMDB, MDBList and YouTube call itself with the signed-in user's keys. The frontend talks to it through one module, `src/api.js`.
 - **Account handling on the backend.** Passwords are hashed with scrypt, and older SHA-256 hashes are upgraded the first time a user signs in. Password resets use single-use tokens that are stored hashed and expire after 24 hours.
 - **Looping carousel as a custom hook.** `usePosterAnimation` gives the sign-in poster slider an endless loop by appending a copy of the first poster and jumping back with the transition switched off, and it restarts the auto-advance timer and blocks clicks while a slide is in motion.
-- **Runs without a backend.** A dev-only demo mode answers the app's requests with made-up films and generated posters, and is left out of production builds.
+- **Runs without a backend.** A dev-only demo mode answers the app's requests from a saved set of real film data, and is left out of production builds.
 
 **Stack:** React 18, Vite 5, MUI Joy and Material UI, a mix of JSX and TypeScript; Node/Express, Firestore and Nodemailer on the backend.
 
@@ -49,7 +59,7 @@ The original app was written in 2024. A 2026 clean-up (moving API keys and third
 
 ### Run it in demo mode
 
-Demo mode needs no backend and no API keys. It answers the app's backend requests with a dozen fictional films and generated posters, and keeps rating and watchlist changes in memory until you reload.
+Demo mode needs no backend and no API keys. It answers the app's backend requests with 16 real films whose details, ratings and trailer links were saved from the live APIs, and keeps rating and watchlist changes in memory until you reload. Posters load from TMDB's image host and trailers from YouTube, so it needs an internet connection.
 
 ```bash
 git clone https://github.com/BowerHarry/HBDb.git
@@ -58,7 +68,7 @@ npm install
 VITE_DEMO=1 npm run dev
 ```
 
-Open the `http://localhost:5173` address Vite prints and sign in with any username and password. Trailers aren't shown in demo mode.
+Open the `http://localhost:5173` address Vite prints and sign in with any username and password.
 
 Demo mode only exists on the dev server. The code lives in `src/demo/` and is left out of production builds.
 
@@ -104,7 +114,7 @@ src/
     watchlist/             watchlist tab
     history/               rated films tab
     films/                 placeholder
-  demo/                    demo mode: mock data, backend mocks, poster generator
+  demo/                    demo mode: saved film data and backend mocks
   assets/                  logo images used in the UI
 ```
 
@@ -134,6 +144,7 @@ Browser (this repo)
 - Film data, images, watchlist and rating storage: [TMDB](https://www.themoviedb.org/). This product uses the TMDB API but is not endorsed or certified by TMDB.
 - Aggregated ratings: [MDBList](https://mdblist.com/).
 - Trailers: YouTube Data API.
+- Film posters and trailers shown in the screenshots belong to their respective studios.
 - UI: [MUI](https://mui.com/) (Joy UI and Material UI), [react-icons](https://react-icons.github.io/react-icons/), [react-card-flip](https://github.com/AaronCCWong/react-card-flip).
 
 ### Licence
