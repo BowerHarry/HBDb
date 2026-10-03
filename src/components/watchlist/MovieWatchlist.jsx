@@ -10,7 +10,6 @@ import CardContent from '@mui/joy/CardContent';
 import CardOverflow from '@mui/joy/CardOverflow';
 import Divider from '@mui/joy/Divider';
 import Typography from '@mui/joy/Typography';
-import { DragDropContext } from 'react-beautiful-dnd';
 
 const Item = styled(Sheet)(({ theme }) => ({
     ...theme.typography['body-sm'],

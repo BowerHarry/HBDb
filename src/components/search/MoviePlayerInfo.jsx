@@ -3,10 +3,10 @@ import "./MoviePlayerInfo.css";
 import Typography from '@mui/joy/Typography';
 import {FaImdb, FaPercent, FaStar, FaRegPlusSquare, FaPlusSquare} from "react-icons/fa"
 import { FaXmark } from 'react-icons/fa6';
-import imdbLogo from '/bin/IMDb.png';
+import imdbLogo from '../../assets/imdb.png';
 import Box from '@mui/joy/Box';
-import letterboxdLogo from '/bin/letterboxd.png';
-import tomatoesLogo from '/bin/rotten-tomatoes.png';
+import letterboxdLogo from '../../assets/letterboxd.png';
+import tomatoesLogo from '../../assets/rotten-tomatoes.png';
 import Chip from '@mui/joy/Chip';
 import Divider from '@mui/joy/Divider';
 import Rating from '@mui/material/Rating';

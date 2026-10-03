@@ -12,7 +12,7 @@ import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 import { FilmList } from './components/films/FilmList';
-import tmdbLogo from '/bin/tmdb logo.svg';
+import tmdbLogo from './assets/tmdb-logo.svg';
 // import searchExclude from '../imdb-exclude.json';
 
 
