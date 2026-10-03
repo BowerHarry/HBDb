@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import "./SearchResult.css";
 
-export const SearchResult = ({ result, movieDetails, setMovieDetails, setResults, setMovie, setVideoLink, setUserMovieDetails }) => {
+export const SearchResult = ({ result, movieDetails, setMovieDetails, setResults, setMovie, setUserMovieDetails }) => {
 
     async function loadMovie() {
         const options = {
@@ -27,7 +27,6 @@ export const SearchResult = ({ result, movieDetails, setMovieDetails, setResults
         const movie = await fetch(`https://api.themoviedb.org/3/movie/${result.id}?language=en-US`, options)
         const decodedMovieJson = await movie.json()
         setMovieDetails(decodedMovieJson)
-        setVideoLink(`https://example.com/embed/movie?imdb=${decodedMovieJson.imdb_id}`) 
         
         setMovie(result);
         setResults([]);

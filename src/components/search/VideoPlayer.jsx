@@ -7,11 +7,11 @@ import TabPanel from '@mui/joy/TabPanel';
 import TabList from '@mui/joy/TabList';
 import Tab, { tabClasses } from '@mui/joy/Tab';
 
-export const VideoPlayer = ({ movie, movieDetails, setMovieDetails, setMovie, videoLink, setVideoLink, userMovieDetails, setUserMovieDetails }) => {
+export const VideoPlayer = ({ movie, movieDetails, setMovieDetails, setMovie, userMovieDetails, setUserMovieDetails }) => {
 
     useEffect(() => {
         handleLoad();
-    },[videoLink]);
+    },[movieDetails]);
     const [loading, setLoading] = useState("")
     const [movieLinkExists, setMovieLinkExists] = useState("")
     const [imddbRating, setImdbRating] = useState("")
@@ -63,26 +63,10 @@ export const VideoPlayer = ({ movie, movieDetails, setMovieDetails, setMovie, vi
      
     async function handleLoad () {
         setMovieLinkExists(false)
-        if (movie) {
-            setLoading(true)
-            const response = await fetch(`https://example.com/api?api_key=REMOVED_API_KEY&request_url=https://example.com/embed/movie/${movieDetails.imdb_id}&js_render=false`)
-            const decodedJson = await response.text();
-            if (decodedJson.includes("<title>404 Not Found</title>")) {
-                localStorage.setItem(movie.id, movie.title)
-                setMovieDetails()
-                setUserMovieDetails()
-                setVideoLink()
-                setMovie()
-                setMovieLinkExists(false)
-                setLoading(false)
-            }
-            else {
-                console.log(userMovieDetails.rated)
-                fetchRatingData()
-                fetchTrailerLink()
-                setMovieLinkExists(true)
-                setLoading(false)
-            }
+        if (movie && movieDetails) {
+            fetchRatingData()
+            fetchTrailerLink()
+            setMovieLinkExists(true)
         }
     }
 
@@ -117,22 +101,10 @@ export const VideoPlayer = ({ movie, movieDetails, setMovieDetails, setMovie, vi
                             },
                           }}
                     >
-                        <Tab disableIndicator value={0}>Film</Tab>
-                        <Tab disableIndicator value={1}>Trailer</Tab>
-                        <Tab disableIndicator value={2}>Similar Films</Tab>
+                        <Tab disableIndicator value={0}>Trailer</Tab>
+                        <Tab disableIndicator value={1}>Similar Films</Tab>
                     </TabList>
                     <TabPanel value={0}>
-                        <div>
-                        <div className='video-player'>
-                            <iframe className='video-player' id="video-player" src={videoLink} frameborder="0" allowFullScreen ></iframe>
-                        </div>
-                        <div className='movie-info-container'>
-                            <MoviePlayerInfo movieDetails={movieDetails} imddbRating={imddbRating} tomatoesRating={tomatoesRating} letterboxdRating={letterboxdRating} userMovieDetails={userMovieDetails} setUserMovieDetails={setUserMovieDetails} />
-                        </div>
-                        </div>
-                    </TabPanel>
-
-                    <TabPanel value={1}>
                         <div>
                         <div className='video-player'>
                             <iframe className='video-player' src={trailerLink} title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
@@ -143,8 +115,8 @@ export const VideoPlayer = ({ movie, movieDetails, setMovieDetails, setMovie, vi
                         </div>
                     </TabPanel>
 
-                    <TabPanel value={2}>
-                        <SimilarFilms movieDetails={movieDetails} setVideoLink={setVideoLink} setMovieDetails={setMovieDetails} setUserMovieDetails={setUserMovieDetails} />
+                    <TabPanel value={1}>
+                        <SimilarFilms movieDetails={movieDetails} setMovieDetails={setMovieDetails} setUserMovieDetails={setUserMovieDetails} />
                     </TabPanel>
                 </Tabs>
 

@@ -24,7 +24,6 @@ export const SearchBar = ({ setResults }) => {
                     film.title && 
                     film.original_language == "en" &&
                     film.id &&
-                    !localStorage.getItem(film.id) &&
                     film.title.toLowerCase().includes(value)
                     )
                 });

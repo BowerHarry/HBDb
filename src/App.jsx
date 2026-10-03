@@ -25,7 +25,6 @@ function App() {
   const [userMovieDetails, setUserMovieDetails] = useState("");
   const [movie, setMovie] = useState("");
   const [tabValue, setTabValue] = useState('search');
-  const [videoLink, setVideoLink] = useState("");
 
 
   // const imdbExclude = []
@@ -62,10 +61,10 @@ function App() {
         <div>
           <div className='search-bar-container'>
             <SearchBar setResults={setResults} />
-            <SearchResultsList results={results} movieDetails={movieDetails} setMovieDetails={setMovieDetails} setResults={setResults} setMovie={setMovie} setVideoLink={setVideoLink} setUserMovieDetails={setUserMovieDetails} />
+            <SearchResultsList results={results} movieDetails={movieDetails} setMovieDetails={setMovieDetails} setResults={setResults} setMovie={setMovie} setUserMovieDetails={setUserMovieDetails} />
           </div>
           <div className='video-player-container'>
-            <VideoPlayer movie={movie} movieDetails={movieDetails} setMovieDetails={setMovieDetails} setMovie={setMovie} videoLink={videoLink} setVideoLink={setVideoLink} userMovieDetails={userMovieDetails} setUserMovieDetails={setUserMovieDetails} />
+            <VideoPlayer movie={movie} movieDetails={movieDetails} setMovieDetails={setMovieDetails} setMovie={setMovie} userMovieDetails={userMovieDetails} setUserMovieDetails={setUserMovieDetails} />
           </div>
         </div>
       }

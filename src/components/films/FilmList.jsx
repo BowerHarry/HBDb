@@ -9,18 +9,6 @@ export const FilmList = ({ }) => {
         // fetchData()
     },[]);
 
-    // const fetchData = () => {
-    //     fetch(`https://mdblist.com/lists/example/json`)
-    //     .then((response) => {
-    //         console.log(response.json())
-    //     })
-    // }
-
-    // const handleChange = (value) => {
-    //     setInput(value)
-    //     fetchData(value)
-    // }
-
     return (
     <div className="">
         List

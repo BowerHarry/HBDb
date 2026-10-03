@@ -79,7 +79,6 @@ if (import.meta.env.DEV && import.meta.env.VITE_DEMO === '1') {
       return json({ rating: { [film.imdb_id]: film.ratings[provider] } });
     }
     if (url.hostname === 'www.googleapis.com') return json({ items: [{ id: { videoId: 'demo' } }] });
-    if (url.hostname === 'example.com') return new Response('<title>OK</title>');
     return realFetch(input, init);
   };
 

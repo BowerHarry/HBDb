@@ -18,7 +18,7 @@ import { Icon } from "@mui/material";
 // import Typography from '@mui/joy/Typography';
 // import LocationOnRoundedIcon from '@mui/icons-material/LocationOnRounded';
 
-export const SimilarFilms = ({ movieDetails, setVideoLink, setMovieDetails, setUserMovieDetails }) => {
+export const SimilarFilms = ({ movieDetails, setMovieDetails, setUserMovieDetails }) => {
     const [films, setFilms] = useState("")
     const [loading, setLoading] = useState(true)
     const [config, setConfig] = useState("")
@@ -213,7 +213,6 @@ export const SimilarFilms = ({ movieDetails, setVideoLink, setMovieDetails, setU
             .then(response => response.json())
             .then((json) => {
                 setMovieDetails(json);
-                setVideoLink(`https://example.com/embed/movie?imdb=${json.imdb_id}`)
             })
     }
     
