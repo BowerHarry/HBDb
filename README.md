@@ -28,12 +28,15 @@ The "Films" and "TV" tabs are placeholders; TV shows were planned but never buil
 
 ## Technical highlights
 
-- **No film database of its own.** Watchlist and ratings are stored in a TMDB account through TMDB's API, so the app only has to manage users.
-- **Separate backend for accounts.** A small Express service ([HBDb-WS](https://github.com/BowerHarry/HBDb-WS)) handles login against Firestore, access requests by email, and a password-reset flow using single-use tokens that are stored hashed and expire after 24 hours.
+- **No film database of its own.** Watchlist and ratings are stored in each user's TMDB account through TMDB's API, so the app only has to manage users.
+- **The browser holds no API keys.** A small Express service ([HBDb-WS](https://github.com/BowerHarry/HBDb-WS)) signs users in against Firestore, issues session tokens, and makes every TMDB, MDBList and YouTube call itself with the signed-in user's keys. The frontend talks to it through one module, `src/api.js`.
+- **Account handling on the backend.** Passwords are hashed with scrypt, and older SHA-256 hashes are upgraded the first time a user signs in. Password resets use single-use tokens that are stored hashed and expire after 24 hours.
 - **Looping carousel as a custom hook.** `usePosterAnimation` gives the sign-in poster slider an endless loop by appending a copy of the first poster and jumping back with the transition switched off, and it restarts the auto-advance timer and blocks clicks while a slide is in motion.
-- **Three rating sources on one page.** Ratings from IMDb, Letterboxd and Rotten Tomatoes are fetched per film through [MDBList](https://mdblist.com/) and shown next to TMDB's details.
+- **Runs without a backend.** A dev-only demo mode answers the app's requests with made-up films and generated posters, and is left out of production builds.
 
 **Stack:** React 18, Vite 5, MUI Joy and Material UI, a mix of JSX and TypeScript; Node/Express, Firestore and Nodemailer on the backend.
+
+The original app was written in 2024. A 2026 clean-up (moving API keys and third-party calls to the backend, reworking authentication, adding demo mode) was done with an AI coding agent.
 
 ---
 
@@ -42,13 +45,11 @@ The "Films" and "TV" tabs are placeholders; TV shows were planned but never buil
 ### Requirements
 
 - Node.js 18 or newer, and npm
-- For anything beyond demo mode:
-  - a running copy of the [HBDb-WS](https://github.com/BowerHarry/HBDb-WS) backend, with a user account in its Firestore `users` collection
-  - API credentials for TMDB, MDBList and the YouTube Data API
+- For anything beyond demo mode: a running copy of the [HBDb-WS](https://github.com/BowerHarry/HBDb-WS) backend with a user account. The TMDB, MDBList and YouTube API keys belong to that account and are set up there, not here.
 
 ### Run it in demo mode
 
-Demo mode needs no backend and no API keys. It answers the app's network requests with a dozen fictional films and generated posters, and keeps rating and watchlist changes in memory until you reload.
+Demo mode needs no backend and no API keys. It answers the app's backend requests with a dozen fictional films and generated posters, and keeps rating and watchlist changes in memory until you reload.
 
 ```bash
 git clone https://github.com/BowerHarry/HBDb.git
@@ -57,20 +58,23 @@ npm install
 VITE_DEMO=1 npm run dev
 ```
 
-Open the `http://localhost:5173` address Vite prints and sign in with any username and password. Trailer playback is switched off in demo mode.
+Open the `http://localhost:5173` address Vite prints and sign in with any username and password. Trailers aren't shown in demo mode.
 
-Demo mode only exists on the dev server. The code lives in `src/demo/` and is left out of production builds. It was added in 2026 with an AI coding agent to make the screenshots above.
+Demo mode only exists on the dev server. The code lives in `src/demo/` and is left out of production builds.
 
 ### Run it against the backend
 
+Start HBDb-WS (it listens on port 8080 by default), then:
+
 ```bash
+cp .env.example .env
 npm install
 npm run dev
 ```
 
-This serves the app over HTTPS using a locally trusted certificate from `vite-plugin-mkcert`, which may ask for your password the first time to install its certificate authority.
+`VITE_API_URL` in `.env` is the backend's address. The backend only accepts browser requests from origins in its `ALLOWED_ORIGINS` setting, which defaults to `https://localhost:5173`.
 
-The backend address is set at the top of `helper-functions.js`: `liveService = true` points at the App Engine deployment (no longer running), `false` at `http://localhost:8080`.
+`npm run dev` serves the app over HTTPS using a locally trusted certificate from `vite-plugin-mkcert`, which may ask for your password the first time to install its certificate authority.
 
 ### Scripts
 
@@ -79,47 +83,51 @@ The backend address is set at the top of `helper-functions.js`: `liveService = t
 | `npm run dev` | Start the Vite dev server, reachable on your local network |
 | `npm run build` | Build to `dist/` |
 | `npm run preview` | Serve the built app |
-| `npm run lint` | Run ESLint |
+| `npm run lint` | Run ESLint on the `.js` and `.jsx` files |
 
 ### Project structure
 
 ```
 index.html
-helper-functions.js        backend URL, request helpers, SHA-256 helper
 src/
   main.jsx                 entry point; renders Login
   Login.tsx                sign-in screen; renders App once signed in
   App.jsx                  tab layout: Watch List, History, Films, TV, Search
+  api.js                   every call to the backend
+  format.js                year and runtime formatting
   hooks/usePosterAnimation.ts
   styles/login.styles.ts
   components/
-    login/                 sign-in, request-access and reset-password forms
+    login/                 sign-in, request-access and reset-password forms, poster carousel
     search/                search bar, results, film details, similar films
+    FilmCardList.jsx       card list shared by the two tabs below
     watchlist/             watchlist tab
     history/               rated films tab
     films/                 placeholder
-  demo/                    demo mode: mock data, request mocks, poster generator
-bin/                       logo images used in the UI
+  demo/                    demo mode: mock data, backend mocks, poster generator
+  assets/                  logo images used in the UI
 ```
 
 How the pieces talk to each other:
 
 ```
 Browser (this repo)
-  ├── HBDb-WS backend ── Firestore (users, reset tokens), email
-  ├── TMDB API ───────── search, film details, similar films, watchlist, ratings
-  ├── MDBList API ────── IMDb / Letterboxd / Rotten Tomatoes ratings
-  └── YouTube Data API ─ trailer lookup
+  └── HBDb-WS backend
+        ├── Firestore ──────── users, sessions, reset tokens
+        ├── Email ──────────── access requests, password resets
+        ├── TMDB API ───────── search, film details, similar films, watchlist, ratings
+        ├── MDBList API ────── IMDb / Letterboxd / Rotten Tomatoes ratings
+        └── YouTube Data API ─ trailer lookup
 ```
 
 ### Known limitations
 
 - Not deployed, and the hosted backend is offline, so outside demo mode you need to run HBDb-WS yourself.
 - The "Films" and "TV" tabs are placeholders.
-- Search only returns English-language films, and only matches lower-case input.
-- Selecting a film in History switches to the Search tab but doesn't open that film.
-- The request-access form on the sign-in screen doesn't submit anywhere yet; the backend has its own form at `/request`.
+- Search only returns English-language films.
+- The session is kept in memory, so reloading the page signs you out, and there is no sign-out button.
 - The layout is built for desktop widths.
+- No automated tests, and the TypeScript files are not type-checked or linted.
 
 ### Credits
 
