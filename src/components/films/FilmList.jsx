@@ -1,16 +1,7 @@
-import React, {useState, useEffect} from "react";
-import {FaSearch} from "react-icons/fa"
-import "./FilmList.css"
-
-export const FilmList = ({ }) => {
-    const [input, setInput] = useState("")
-
-    useEffect(() => {
-        // fetchData()
-    },[]);
-
+// Placeholder for a browsable list of films; not built yet.
+export const FilmList = () => {
     return (
-    <div className="">
+    <div>
         List
     </div>
     )

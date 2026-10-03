@@ -2,8 +2,13 @@
     padding: 10px 20px;
     display: flex;
     justify-content: space-between;
+    cursor: pointer;
 }
 
 .search-result:hover {
     background-color: #efefef;
+}
+
+.result-year {
+    color: #777;
 }

@@ -3,11 +3,17 @@ import Button from '@mui/joy/Button';
 import FormControl from '@mui/joy/FormControl';
 import FormLabel from '@mui/joy/FormLabel';
 import Input from '@mui/joy/Input';
+import Textarea from '@mui/joy/Textarea';
 import Stack from '@mui/joy/Stack';
 import Tooltip from '@mui/joy/Tooltip';
 import { InfoOutlined } from '@mui/icons-material';
 
-export const RequestAccessForm = ({ onSubmit, onBack }) => (
+interface RequestAccessFormProps {
+  onSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
+  onBack: () => void;
+}
+
+export const RequestAccessForm: React.FC<RequestAccessFormProps> = ({ onSubmit, onBack }) => (
     <form onSubmit={onSubmit}>
       <Stack spacing={2}>
         <FormControl required>
@@ -17,15 +23,15 @@ export const RequestAccessForm = ({ onSubmit, onBack }) => (
               <InfoOutlined sx={{ fontSize: '1rem' }} />
             </Tooltip>
           </FormLabel>
-          <Input type="email" autoComplete="off" />
+          <Input type="email" name="email" autoComplete="off" />
         </FormControl>
         <FormControl required>
           <FormLabel>Desired Username</FormLabel>
-          <Input type="text" autoComplete="off" />
+          <Input type="text" name="username" autoComplete="off" />
         </FormControl>
-        <FormControl required>
-          <FormLabel>Password</FormLabel>
-          <Input type="password" autoComplete="off" />
+        <FormControl>
+          <FormLabel>Message</FormLabel>
+          <Textarea name="message" minRows={2} />
         </FormControl>
         <Stack direction="row" spacing={1}>
           <Button type="submit" fullWidth>Submit Request</Button>

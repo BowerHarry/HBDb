@@ -5,9 +5,9 @@
     text-align: center;
     min-height: 70vh;
     padding-bottom: 25vh;
-  } 
-  
-.video-player {
+  }
+
+.trailer {
     border-radius: 5px;
     overflow:hidden;
     z-index: 1;
@@ -15,25 +15,20 @@
     justify-content: center;
     flex-direction: column;
     max-width: 80vw;
-    min-height: 50vh; 
-    max-height: 50vh; 
+    min-height: 50vh;
+    max-height: 50vh;
     margin:auto;
     aspect-ratio: 3/2;
-} 
-body {
-    margin: 0;
 }
 
-
-iframe {
+iframe.trailer {
     background: #000;
     border: none;
     flex-grow: 1;
-    margin:auto;
 }
 
-.container {
+.film-details {
     width: 100%;
     height: 100%;
+    overflow: scroll;
 }
-

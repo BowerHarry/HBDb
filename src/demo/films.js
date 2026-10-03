@@ -78,5 +78,5 @@ export const films = [
 
 export const initialWatchlist = [104, 112, 103, 106, 108];
 
-// TMDB stores ratings out of 10; the UI shows them as half-stars out of 5.
+// Ratings are out of 10, as TMDB stores them; the UI shows half-stars out of 5.
 export const initialRatings = { 101: 9, 102: 7, 105: 8, 110: 6, 111: 8, 107: 5 };
